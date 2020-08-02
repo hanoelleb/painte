@@ -5,4 +5,8 @@ body {
   border: solid 1px gray;
   background-color: white; }
 
+#pallete {
+  display: grid;
+  grid-template-columns: repeat(6, 50px); }
+
 /*# sourceMappingURL=style.css.map */

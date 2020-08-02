@@ -1,24 +1,37 @@
 //default color is black
 var currentColor = '#000000';
 
-//red  C70039 
-//orange FF6600
-//yellow #FFFF00
-//light green #33CC33
-//dark green #006600
-//light blue #00FFFF
-//darkblue #3333FF
-//violet #CC99FF
-//indigo #9900FF
-//brown #996633
-//gray #808080
-//black #000000
-//white #FFFFFF
+var colors = [
+  '#C70039',
+  '#FF6600',
+  '#FFFF00',
+  '#33CC33',
+  '#006600',
+  '#00FFFF',
+  '#3333FF',
+  '#CC99FF',
+  '#9900FF',
+  '#996633',
+  '#808080',
+  '#000000',
+  '#000000',
+];
 
+function createPallete() {
+    var pallete = document.getElementById('pallete');
+    for (var i = 0; i < colors.length; i++) {
+        var box = document.createElement('div');
+	box.style.cssText = 'width: 50px; height: 50px; background-color: ' 
+	    + colors[i] + ';';
+	pallete.appendChild(box);
+    }
+};
 //eraser is just white with heavier stroke
 
 $(document).ready(function() {
    var isDrawing = false;
+
+   createPallete();
 
    $('#canvas').on('mousedown', function(e) {
        isDrawing = true;
