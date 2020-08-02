@@ -1,9 +1,24 @@
+//default color is black
+var currentColor = '#000000';
+
+//red  C70039 
+//orange FF6600
+//yellow #FFFF00
+//light green #33CC33
+//dark green #006600
+//light blue #00FFFF
+//darkblue #3333FF
+//violet #CC99FF
+//indigo #9900FF
+//brown #996633
+//gray #808080
+//black #000000
+//white #FFFFFF
+
+//eraser is just white with heavier stroke
+
 $(document).ready(function() {
    var isDrawing = false;
-
-   $('#canvas').on('mouseover', function() {
-       console.log('in canvas');
-   });
 
    $('#canvas').on('mousedown', function(e) {
        isDrawing = true;
@@ -15,8 +30,6 @@ $(document).ready(function() {
    
        ctx.beginPath();
        ctx.moveTo(x,y);
-
-       console.log('holding');
    });
 
    $('#canvas').on('mousemove', function(e) {
