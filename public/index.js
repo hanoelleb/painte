@@ -1,8 +1,12 @@
 //default color is black
+
+var socket = io();
+
 var currentColor = '#000000';
 var lineWidth = 5;
 
 var colors = [
+  '#FF9999',
   '#C70039',
   '#FF6600',
   '#FFFF00',
