@@ -6,10 +6,29 @@
 	   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     </head>
     <body>
-	  <canvas id='canvas' width='300px' height='300px'></canvas>
-	  <div id='pallete'>
-          </div>
 	  <div id='brushes'>
+          </div>
+	  <div id='holder'>
+	      <div id='pallete'>
+              </div>
+              
+	      <div id='game'>
+		  <div id='bar'>
+                      <div id='timer'>TIME: </div>
+                      <div id='word'></div>		 
+		  </div>
+	          <canvas id='canvas' width='300px' height='300px'></canvas>
+              </div>
+
+	      <div id='chat'>
+		  <div id='log'>
+                      <p>Send messages!</p>
+                  </div>
+		  <form>
+                      <input type='text'></input>
+		      <input type='submit' value='Send'></input>
+                  </form>
+	      </div>
 	  </div>
 	  <script src='index.js'></script>
     </body>

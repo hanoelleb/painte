@@ -1,13 +1,67 @@
 body
   background-color: skyblue
+  font-family: Arial
+
+#game
+  display: flex
+  flex-direction: column
+  align-items: center
+
+#bar
+  margin-left: 15px
+  width: 295px
+  height: 50px
+  background-color: gold
+  border: 2px solid goldenrod
+  border-radius: 5px
 
 #canvas
   border: solid 1px gray
   background-color: white
-  display: block
-  margin-left: auto
-  margin-right: auto
+  display: inline-block
+  height: 300px
+  margin-left: 2vw
+
+#brushes
+  margin-left: 20vw
+  margin-bottom: 3vw
 
 #pallete
   display: grid
-  grid-template-columns: repeat(6, 50px)
+  grid-template-columns: repeat(2, 50px)
+
+#chat
+  padding: 5px
+  margin-left: 2vw
+  background-color: gold
+  height: 70vh
+  border: solid 2px goldenrod
+  border-radius: 5px
+  display: flex
+  flex-direction: column
+  form
+    width: 35vw
+    input[type='text']
+        width: 90%
+    input[type='submit']
+        border: 1px solid goldenrod
+        border-radius: 5px
+        color: goldenrod
+        background-color: gold
+        padding: 5px
+        margin-left: auto
+        margin-right: auto
+        display: block
+
+#log
+  border-radius: 5px
+  background-color: white
+  height: 55vh
+  width: 35vw
+  margin-bottom: 5px
+  p
+    margin-top: 3px
+    margin-left: 3px
+
+#holder
+  display: flex
