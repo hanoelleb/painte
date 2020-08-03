@@ -24,9 +24,17 @@ app.use(function(req, res, next) {
     .send('Not Found');
 });
 
-io.on('connection', () =>{
-  console.log('a user is connected')
-})
+io.on('connection', (socket) => {
+  console.log('a user is connected');
+  
+  socket.on('message', (msg) => {
+    io.emit('message', msg);
+  });
+
+  socket.on('draw', (data) => {
+    io.emit('draw', data);
+  });
+});
 
 const portNum = process.env.PORT || 3000;
 

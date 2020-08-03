@@ -5,6 +5,9 @@ var socket = io();
 var currentColor = '#000000';
 var lineWidth = 5;
 
+var startX = 0;
+var startY = 0;
+
 var colors = [
   '#FF9999',
   '#C70039',
@@ -67,6 +70,23 @@ function createBrushes() {
 //eraser is just white with heavier stroke
 
 $(document).ready(function() {
+   socket.on('message', function(msg){
+      $('#log').append($('<p>').text(msg));
+    });
+
+   socket.on('draw', function(data) {
+       //startX, startY, x, y
+       var ctx = $('#canvas')[0].getContext('2d');
+       ctx.beginPath();
+       ctx.moveTo(data[0], data[1]);
+
+       ctx.strokeStyle = data[4];
+       ctx.lineWidth = data[5];
+
+       ctx.lineTo(data[2],data[3]);
+       ctx.stroke();
+   });
+
    var isDrawing = false;
 
    createPallete();
@@ -84,6 +104,9 @@ $(document).ready(function() {
 
        var x = e.offsetX;
        var y = e.offsetY;
+
+       startX = x;
+       startY = y;
    
        ctx.beginPath();
        ctx.moveTo(x,y);
@@ -95,17 +118,30 @@ $(document).ready(function() {
 
 	   ctx.strokeStyle = currentColor;
            ctx.lineWidth = lineWidth;
-	   console.log(lineWidth);
 
            var x = e.offsetX;
            var y = e.offsetY;
 
            ctx.lineTo(x,y);
            ctx.stroke();
+
+	   socket.emit('draw', 
+	       [startX, startY, x, y, currentColor, lineWidth]);
+
+	   startX = x;
+	   startY = y;
        }
    });
 
-   $('#canvas').on('mouseup', function() {
+   $('#holder').on('mouseup', function() {
        isDrawing = false;
+   });
+
+   $('#send').on('submit', function(event) {
+       event.preventDefault();
+       var message = $('#message').val();
+       socket.emit('message', message);
+       $('#message').val('');
+       return false;
    });
 })
