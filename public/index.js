@@ -10,6 +10,9 @@ xmlhttp.onreadystatechange = function() {
     }
 }
 
+const START_TIME = 60;
+var current_time = START_TIME;
+
 xmlhttp.open("GET", "words.txt", true);
 xmlhttp.send();
 
@@ -41,6 +44,13 @@ var colors = [
 ];
 
 brushSizes = [1, 5, 10]
+
+//clear interval and set interval
+var handler = function() {
+  var seconds = parseInt(current_time % 60);
+  document.getElementById('timer').innerHTML = 'TIME: ' + seconds;
+  current_time--;
+}
 
 function createPallete() {
     var pallete = document.getElementById('pallete');
@@ -97,6 +107,8 @@ $(document).ready(function() {
    $('#bar').append('<ul id="choices">' + 
    `<li><button class="choice">${wordChoices[0].toUpperCase()}</button></li>` +   `<li><button class="choice">${wordChoices[1].toUpperCase()}</button></li>` +   `<li><button class="choice">${wordChoices[2].toUpperCase()}</button></li>` +
 	            '</ul>');
+
+   var timer = setInterval(handler, 1000);
 
    socket.on('message', function(msg){
       $('#log').append($('<p>').text(msg));
