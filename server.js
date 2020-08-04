@@ -34,6 +34,10 @@ io.on('connection', (socket) => {
   socket.on('draw', (data) => {
     io.emit('draw', data);
   });
+
+  socket.on('player', (nickname) => {
+    io.emit('player', nickname);
+  });
 });
 
 const portNum = process.env.PORT || 3000;

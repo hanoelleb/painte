@@ -7,18 +7,26 @@
 	   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     </head>
     <body>
-	  <div id='brushes'>
-          </div>
 	  <div id='holder'>
-	      <div id='pallete'>
-              </div>
+	      <div id='art'>
+	          <div id='pallete'>
+                  </div>
               
+		  <div id='brushes'>
+                  </div>
+              </div>
+	      
 	      <div id='game'>
 		  <div id='bar'>
                       <div id='timer'>TIME: </div>
                       <div id='word'></div>		 
 		  </div>
-	          <canvas id='canvas' width='300px' height='300px'></canvas>
+	          <canvas id='canvas' width='500px' height='500px'></canvas>
+              </div>
+              
+              <div id='players'>
+                  <label>PLAYERS</label>
+		  <p class='player'>Player 1</p>
               </div>
 
 	      <div id='chat'>
@@ -31,6 +39,12 @@
                   </form>
 	      </div>
 	  </div>
+
+	  <form id='player-form'>
+              <input type='text' id='nickname' placeholder='nickname'></input>
+	      <input type='submit' value='Start'></input>
+	  </form>
+
 	  <script src='index.js'></script>
     </body>
 </html>

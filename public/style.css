@@ -10,7 +10,7 @@ body {
 #bar {
   margin-left: 15px;
   margin-bottom: 5px;
-  width: 295px;
+  width: 37vw;
   height: 50px;
   background-color: gold;
   border: 2px solid goldenrod;
@@ -20,19 +20,22 @@ body {
   border: solid 1px gray;
   background-color: white;
   display: inline-block;
-  height: 300px;
-  margin-left: 2vw; }
+  margin-left: 1vw; }
+
+#art {
+  margin-top: 60px; }
 
 #brushes {
-  margin-left: 25vw;
-  margin-bottom: 3vw; }
+  margin-top: 1vw; }
 
 #pallete {
   display: grid;
-  grid-template-columns: repeat(2, 50px); }
+  grid-template-columns: repeat(2, 25px);
+  height: min-content; }
 
 #chat {
   padding: 5px;
+  margin-top: 60px;
   margin-left: 2vw;
   background-color: gold;
   height: 70vh;
@@ -41,9 +44,9 @@ body {
   display: flex;
   flex-direction: column; }
   #chat form {
-    width: 35vw; }
+    width: 33vw; }
     #chat form input[type='text'] {
-      width: 90%; }
+      width: 87%; }
     #chat form input[type='submit'] {
       border: 1px solid goldenrod;
       border-radius: 5px;
@@ -67,5 +70,37 @@ body {
 
 #holder {
   display: flex; }
+
+#players {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  margin-top: 60px;
+  margin-left: 0px;
+  background-color: gold;
+  border: solid 2px goldenrod;
+  border-radius: 5px;
+  width: 37vw;
+  height: 72vh;
+  color: goldenrod; }
+
+#player-form {
+  position: absolute;
+  background-color: gold;
+  border: solid 2px goldenrod;
+  border-radius: 5px;
+  padding: 10px;
+  left: 35vw;
+  top: 20vh;
+  z-index: 0; }
+  #player-form input[type='submit'] {
+    border: 1px solid goldenrod;
+    border-radius: 5px;
+    color: goldenrod;
+    background-color: gold;
+    padding: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block; }
 
 /*# sourceMappingURL=style.css.map */

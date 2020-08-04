@@ -2,8 +2,6 @@
 
 var socket = io();
 
-
-
 var currentColor = '#000000';
 var lineWidth = 5;
 
@@ -34,7 +32,7 @@ function createPallete() {
     for (var i = 0; i < colors.length; i++) {
         var box = document.createElement('div');
 	box.className = 'color';
-	box.style.cssText = 'width: 50px; height: 50px; background-color: ' 
+	box.style.cssText = 'width: 25px; height: 25px; background-color: ' 
 	    + colors[i] + '; border: solid 1px gray';
 	pallete.appendChild(box);
     }
@@ -53,7 +51,6 @@ function createBrushes() {
        const index = i;
        brush.addEventListener('click', function() {
            lineWidth = brushSizes[index];   
-	   console.log(lineWidth);
        });
 
        brushes.appendChild(brush);
@@ -76,6 +73,10 @@ $(document).ready(function() {
       $('#log').append($('<p>').text(msg));
     });
 
+   socket.on('player', function(nickname){
+      $('#players').append($('<label>').text(nickname));
+   });
+
    socket.on('draw', function(data) {
        //startX, startY, x, y
        var ctx = $('#canvas')[0].getContext('2d');
@@ -89,6 +90,7 @@ $(document).ready(function() {
        ctx.stroke();
    });
 
+   var hasStarted = false;
    var isDrawing = false;
 
    createPallete();
@@ -114,8 +116,17 @@ $(document).ready(function() {
        ctx.moveTo(x,y);
    });
 
+   $('#player-form').on('submit', function(event) {
+       event.preventDefault();
+       hasStarted = true;
+       var nickname = $('#nickname').val();
+       socket.emit('player', nickname);
+       $(this).hide();
+       return false;
+   });
+
    $('#canvas').on('mousemove', function(e) {
-       if (isDrawing) {
+       if (isDrawing && hasStarted) {
            var ctx = $(this)[0].getContext('2d');
 
 	   ctx.strokeStyle = currentColor;
