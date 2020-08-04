@@ -59,7 +59,8 @@ body {
   background-color: white;
   height: 55vh;
   width: 35vw;
-  margin-bottom: 5px; }
+  margin-bottom: 5px;
+  overflow-y: scroll; }
   #log p {
     margin-top: 3px;
     margin-left: 3px; }

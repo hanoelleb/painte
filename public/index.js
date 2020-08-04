@@ -2,6 +2,8 @@
 
 var socket = io();
 
+
+
 var currentColor = '#000000';
 var lineWidth = 5;
 
