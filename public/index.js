@@ -79,11 +79,25 @@ function createBrushes() {
 
        ctx.stroke();
    }
-
 }
 //eraser is just white with heavier stroke
 
+function clearCanvas() {
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
 $(document).ready(function() {
+   wordChoices = [];
+   for (var i = 0; i < 3; i++) {
+       var randIndex = Math.floor(Math.random() * words.length);
+       wordChoices.push(words[randIndex]);
+   }
+   $('#bar').append('<ul id="choices">' + 
+   `<li><button class="choice">${wordChoices[0].toUpperCase()}</button></li>` +   `<li><button class="choice">${wordChoices[1].toUpperCase()}</button></li>` +   `<li><button class="choice">${wordChoices[2].toUpperCase()}</button></li>` +
+	            '</ul>');
+
    socket.on('message', function(msg){
       $('#log').append($('<p>').text(msg));
     });
@@ -111,9 +125,26 @@ $(document).ready(function() {
    createPallete();
    createBrushes();
 
+   $('#clear').click( function() {
+       clearCanvas();
+   });
+
    $('.color').click( function() {
        currentColor = $(this).css('background-color');
-       console.log(currentColor);
+   });
+
+   $('.choice').click( function() {
+       var word = $(this).text();
+       console.log(word);
+   });
+
+   $('#player-form').on('submit', function(event) {
+       event.preventDefault();
+       hasStarted = true;
+       var nickname = $('#nickname').val();
+       socket.emit('player', nickname);
+       $(this).hide();
+       return false;
    });
 
    $('#canvas').on('mousedown', function(e) {
@@ -129,15 +160,6 @@ $(document).ready(function() {
    
        ctx.beginPath();
        ctx.moveTo(x,y);
-   });
-
-   $('#player-form').on('submit', function(event) {
-       event.preventDefault();
-       hasStarted = true;
-       var nickname = $('#nickname').val();
-       socket.emit('player', nickname);
-       $(this).hide();
-       return false;
    });
 
    $('#canvas').on('mousemove', function(e) {

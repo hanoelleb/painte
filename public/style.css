@@ -15,6 +15,11 @@ body {
   background-color: gold;
   border: 2px solid goldenrod;
   border-radius: 5px; }
+  #bar ul {
+    list-style: none;
+    display: flex; }
+    #bar ul li {
+      margin-right: 20px; }
 
 #canvas {
   border: solid 1px gray;
