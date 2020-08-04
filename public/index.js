@@ -1,3 +1,18 @@
+var loaded = false;
+
+var words = [];
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        var text = xmlhttp.responseText;
+        words = text.split('\n');
+	loaded = true;
+    }
+}
+
+xmlhttp.open("GET", "words.txt", true);
+xmlhttp.send();
+
 //default color is black
 
 var socket = io();
