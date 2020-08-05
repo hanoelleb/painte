@@ -86,7 +86,20 @@ function createBrushes() {
        ctx.stroke();
    }
 }
-//eraser is just white with heavier stroke
+
+function processGuess(answer, guess) {
+    result = '';
+    guess = guess.toUpperCase();
+    for (var i = 0; i < guess.length; i++) {
+        if (i >= answer.length)
+	    break;
+	else if (guess[i] === answer[i])
+	    result += answer[i] + ' '
+	else
+	    result += '_ '
+    }
+    return result;
+}
 
 function clearCanvas() {
     var canvas = document.getElementById('canvas');
@@ -95,22 +108,52 @@ function clearCanvas() {
 }
 
 $(document).ready(function() {
-   
-   wordChoices = [];
-   for (var i = 0; i < 3; i++) {
-       var randIndex = Math.floor(Math.random() * words.length);
-       wordChoices.push(words[randIndex]);
-   }
-   $('#choices').append(
-   `<li><button class="choice">${wordChoices[0].toUpperCase()}</button></li>` +   `<li><button class="choice">${wordChoices[1].toUpperCase()}</button></li>` +   `<li><button class="choice">${wordChoices[2].toUpperCase()}</button></li>`
-   );
-   
    var nickname = '';
    var timer = setInterval(handler, 1000);
    clearInterval(timer);
+   
+   score = 0;
+   var answer = '';
+
+   socket.on('turn', function() {
+       wordChoices = [];
+       for (var i = 0; i < 3; i++) {
+           var randIndex = Math.floor(Math.random() * words.length);
+           wordChoices.push(words[randIndex]);
+       }
+       $('#choices').append(
+       `<li><button class="choice">${wordChoices[0].toUpperCase()}` + 
+            '</button></li>' +   
+       `<li><button class="choice">${wordChoices[1].toUpperCase()}` + 
+            '</button></li>' +   
+       `<li><button class="choice">${wordChoices[2].toUpperCase()}` + 
+            '</button></li>'
+       );
+
+       $('.choice').click( function() {
+           //emit word to others (must be hidden)
+           var word = $(this).text();
+	   socket.emit('word', word);
+           running = true;
+           timer = setInterval(handler, 1000);
+           $('#word').text(word);
+           $('#choices').html("");
+       });
+   });
+
+   socket.on('word', function(word) {
+       answer = word;
+       var hidden = '';
+       for (var i = 0; i < word.length; i++){
+           hidden += '_ '
+       }
+       $('#word').text(hidden);
+   });
 
    socket.on('message', function(msg){
-      $('#log').append($('<p>').text(msg));
+      //not a guess, just a message
+      if (answer === '')
+          $('#log').append($('<p>').text(msg));
     });
 
    socket.on('player', function(nickname){
@@ -142,16 +185,6 @@ $(document).ready(function() {
 
    $('.color').click( function() {
        currentColor = $(this).css('background-color');
-   });
-
-   $('.choice').click( function() {
-       //emit word to others (must be hidden)
-       var word = $(this).text();
-       console.log(word);
-       running = true;
-       timer = setInterval(handler, 1000);
-       $('#word').text(word);
-       $('#choices').html("");
    });
 
    $('#player-form').on('submit', function(event) {
@@ -208,6 +241,18 @@ $(document).ready(function() {
 
    $('#send').on('submit', function(event) {
        event.preventDefault();
+       if (answer !== '') {
+           var guess = processGuess(answer, $('#message').val());
+
+	   var check = guess.replaceAll(' ','');
+	   if (check === answer) {
+	       score += current_time;
+               $('#score').text('SCORE: ' + score);
+               socket.emit('correct');
+	   }
+	   else
+	       socket.emit('guess', guess);
+       }
        var message = nickname + ': ' + $('#message').val();
        socket.emit('message', message);
        $('#message').val('');

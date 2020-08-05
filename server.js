@@ -24,9 +24,26 @@ app.use(function(req, res, next) {
     .send('Not Found');
 });
 
+
+var players = [];
+var turn = 0;
+
+function nextTurn() {
+    turn = turn++ % players.Length;
+}
+
 io.on('connection', (socket) => {
   console.log('a user is connected');
-  
+  players.push(socket);
+
+  if (players[turn] === socket) {
+    io.emit('turn');
+
+    socket.on('finished', () => {
+        nextTurn();
+    });
+  }
+
   socket.on('message', (msg) => {
     io.emit('message', msg);
   });
@@ -38,6 +55,17 @@ io.on('connection', (socket) => {
   socket.on('player', (nickname) => {
     io.emit('player', nickname);
   });
+
+  socket.on('disconnect', () => {
+    console.log('a user has disconnected');
+    players.splice(players.indexOf(socket),1);
+    turn--;
+  });
+
+  socket.on('word', (word) => {
+      socket.broadcast.emit('word', word);
+  });
+
 });
 
 const portNum = process.env.PORT || 3000;
