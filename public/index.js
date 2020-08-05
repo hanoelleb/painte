@@ -42,8 +42,11 @@ var handler = function() {
       current_time--;
       if (current_time === 0) {
          //show the word
-         //emit end of turn 
+         //emit end of turn
+	 socket.emit('finish');
          clearCanvas();
+	 running = false;
+	 current_time = START_TIME;
       } 
   }
 }
@@ -117,6 +120,7 @@ $(document).ready(function() {
    var answer = '';
 
    socket.on('turn', function() {
+       console.log('your turn');
        isTurn = true;
        wordChoices = [];
        for (var i = 0; i < 3; i++) {
@@ -144,6 +148,7 @@ $(document).ready(function() {
    });
 
    socket.on('word', function(word) {
+       running = true;
        answer = word;
        var hidden = '';
        for (var i = 0; i < word.length; i++){

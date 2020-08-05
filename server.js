@@ -29,8 +29,8 @@ var players = [];
 var turn = 0;
 var word = '';
 
-function nextTurn() {
-    turn = turn++ % players.Length;
+function nextTurn(turn, players) {
+    return (turn+1) % players.length;
 }
 
 function processGuess(word, guess) {
@@ -48,14 +48,20 @@ io.on('connection', (socket) => {
   console.log('a user is connected');
   players.push(socket);
 
+  for (var i = 0; i < players.length; i++)
+     console.log(players[i].id);
+
   if (players[turn] === socket) {
     io.emit('turn');
-
-    socket.on('finished', () => {
-	word = '';
-        nextTurn();
-    });
   }
+
+  socket.on('finish', () => {
+        word = '';
+        console.log('finished');
+        turn = nextTurn(turn, players);
+	console.log(players[turn].id);
+	io.to(players[turn].id).emit('turn');
+  });
 
   socket.on('message', (msg) => {
     io.emit('message', msg);

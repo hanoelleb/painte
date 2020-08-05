@@ -11,7 +11,7 @@ body {
   margin-left: 15px;
   margin-bottom: 5px;
   width: 37vw;
-  height: 50px;
+  height: 100px;
   background-color: gold;
   border: 2px solid goldenrod;
   border-radius: 5px; }
@@ -28,7 +28,7 @@ body {
   margin-left: 1vw; }
 
 #art {
-  margin-top: 60px; }
+  margin-top: 110px; }
 
 #brushes {
   margin-top: 1vw; }
@@ -40,7 +40,7 @@ body {
 
 #chat {
   padding: 5px;
-  margin-top: 60px;
+  margin-top: 110px;
   margin-left: 2vw;
   background-color: gold;
   height: 70vh;
@@ -80,7 +80,7 @@ body {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
-  margin-top: 60px;
+  margin-top: 110px;
   margin-left: 0px;
   background-color: gold;
   border: solid 2px goldenrod;
