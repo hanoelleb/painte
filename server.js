@@ -27,9 +27,21 @@ app.use(function(req, res, next) {
 
 var players = [];
 var turn = 0;
+var word = '';
 
 function nextTurn() {
     turn = turn++ % players.Length;
+}
+
+function processGuess(word, guess) {
+    var result = '';
+    for (var i = 0; i < word.length; i++) {
+        if (word[i] === '_') 
+	    result += guess[i];
+	else
+	    result += word[i];
+    }
+    return result;
 }
 
 io.on('connection', (socket) => {
@@ -40,6 +52,7 @@ io.on('connection', (socket) => {
     io.emit('turn');
 
     socket.on('finished', () => {
+	word = '';
         nextTurn();
     });
   }
@@ -64,6 +77,15 @@ io.on('connection', (socket) => {
 
   socket.on('word', (word) => {
       socket.broadcast.emit('word', word);
+  });
+
+  socket.on('guess', (guess) => {
+    //emit guess to everyone, pro
+    if (word === '')
+        word = guess;
+    else 
+	word = processGuess(word, guess);
+    io.emit('update', word);
   });
 
 });

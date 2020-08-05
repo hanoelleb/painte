@@ -108,6 +108,7 @@ function clearCanvas() {
 }
 
 $(document).ready(function() {
+   var isTurn = false;
    var nickname = '';
    var timer = setInterval(handler, 1000);
    clearInterval(timer);
@@ -116,6 +117,7 @@ $(document).ready(function() {
    var answer = '';
 
    socket.on('turn', function() {
+       isTurn = true;
        wordChoices = [];
        for (var i = 0; i < 3; i++) {
            var randIndex = Math.floor(Math.random() * words.length);
@@ -148,6 +150,12 @@ $(document).ready(function() {
            hidden += '_ '
        }
        $('#word').text(hidden);
+   });
+
+   //update after each guess for any correct letters
+   socket.on('update', function(word) {
+       if (!isTurn)
+           $('#word').text(word);
    });
 
    socket.on('message', function(msg){
