@@ -36,7 +36,7 @@ function nextTurn(turn, players) {
 function processGuess(word, guess) {
     var result = '';
     for (var i = 0; i < word.length; i++) {
-        if (word[i] === '_') 
+        if (word[i] === '_' && i < guess.length) 
 	    result += guess[i];
 	else
 	    result += word[i];
@@ -85,13 +85,13 @@ io.on('connection', (socket) => {
       socket.broadcast.emit('word', word);
   });
 
-  socket.on('guess', (guess) => {
+  socket.on('guess', (data) => {
     //emit guess to everyone, pro
     if (word === '')
-        word = guess;
+        word = data[0];
     else 
-	word = processGuess(word, guess);
-    io.emit('update', word);
+	word = processGuess(word, data[0]);
+    io.emit('update', [word, data[1], data[2]]);
   });
 
 });

@@ -158,9 +158,11 @@ $(document).ready(function() {
    });
 
    //update after each guess for any correct letters
-   socket.on('update', function(word) {
-       if (!isTurn)
-           $('#word').text(word);
+   socket.on('update', function(data) {
+       if (!isTurn) {
+           $('#word').text(data[0]);
+           $('#log').append($('<p>').text(data[2] + ': ' + data[1]));
+       }
    });
 
    socket.on('message', function(msg){
@@ -264,7 +266,7 @@ $(document).ready(function() {
                socket.emit('correct');
 	   }
 	   else
-	       socket.emit('guess', guess);
+	       socket.emit('guess', [guess, $('#message').val(), nickname]);
        }
        var message = nickname + ': ' + $('#message').val();
        socket.emit('message', message);
