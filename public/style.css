@@ -10,7 +10,7 @@ body {
 #bar {
   margin-left: 15px;
   margin-bottom: 5px;
-  width: 37vw;
+  width: max-content;
   height: 100px;
   background-color: gold;
   border: 2px solid goldenrod;
