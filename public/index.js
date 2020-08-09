@@ -125,7 +125,8 @@ $(document).ready(function() {
    socket.on('turn', function() {
        running = false;
        isTurn = true;
-       
+       $('#clear').removeAttr('disabled');
+
        current_time = START_TIME;
        clearInterval(timer);
 
@@ -167,6 +168,7 @@ $(document).ready(function() {
    socket.on('word', function(word) {
        isTurn = false;
        running = true;
+       $('#clear').attr('disabled', 'true');
 
        clearInterval(timer);
        current_time = START_TIME;
@@ -222,6 +224,10 @@ $(document).ready(function() {
        ctx.stroke();
    });
 
+   socket.on('clear', function() {
+       clearCanvas();
+   });
+
    socket.on('left', function(name) {
       $('#'+name).remove();
       $('#log').append($('<p>')
@@ -236,6 +242,7 @@ $(document).ready(function() {
 
    $('#clear').click( function() {
        clearCanvas();
+       socket.emit('clear');
    });
 
    $('.color').click( function() {
@@ -274,7 +281,7 @@ $(document).ready(function() {
    });
 
    $('#canvas').on('mousemove', function(e) {
-       if (isDrawing && hasStarted) {
+       if (isDrawing && hasStarted && isTurn) {
            var ctx = $(this)[0].getContext('2d');
 
 	   ctx.strokeStyle = currentColor;

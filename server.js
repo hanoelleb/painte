@@ -73,7 +73,11 @@ io.on('connection', (socket) => {
   });
 
   socket.on('draw', (data) => {
-    io.emit('draw', data);
+    socket.broadcast.emit('draw', data);
+  });
+
+  socket.on('clear', () => {
+    socket.broadcast.emit('clear');
   });
 
   socket.on('player', (nickname) => {
