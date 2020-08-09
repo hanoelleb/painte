@@ -31,7 +31,8 @@ body {
   border: solid 1px gray;
   background-color: white;
   display: inline-block;
-  margin-left: 1vw; }
+  margin-left: 1vw;
+  margin-right: 1vw; }
 
 #art {
   margin-top: 110px; }
