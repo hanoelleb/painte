@@ -54,6 +54,10 @@ io.on('connection', (socket) => {
 
   if (players[turn] === socket) {
     io.emit('turn');
+  } 
+  else if (players.length === 1) {
+    turn = 0;
+    io.to(players[0].id).emit('turn');
   }
 
   socket.on('finish', () => {
@@ -79,7 +83,11 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('a user has disconnected');
     players.splice(players.indexOf(socket),1);
+    
     turn--;
+    turn = nextTurn(turn, players);
+    if (players.length != 0)
+        io.to(players[turn].id).emit('turn');
   });
 
   socket.on('word', (word) => {
