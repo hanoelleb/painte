@@ -51,7 +51,7 @@ body {
   margin-top: 110px;
   margin-left: 2vw;
   background-color: gold;
-  height: 70vh;
+  height: 590px;
   border: solid 2px goldenrod;
   border-radius: 5px;
   display: flex;
@@ -94,7 +94,7 @@ body {
   border: solid 2px goldenrod;
   border-radius: 5px;
   width: 7vw;
-  height: 72vh;
+  height: 600px;
   color: goldenrod; }
 
 #player-form {
