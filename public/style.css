@@ -14,12 +14,18 @@ body {
   height: 100px;
   background-color: gold;
   border: 2px solid goldenrod;
-  border-radius: 5px; }
+  border-radius: 5px;
+  text-align: center; }
   #bar ul {
     list-style: none;
     display: flex; }
     #bar ul li {
       margin-right: 20px; }
+  #bar #word {
+    font-size: 30px; }
+  #bar #timer {
+    margin-top: 10px;
+    font-size: 18px; }
 
 #canvas {
   border: solid 1px gray;

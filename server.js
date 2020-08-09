@@ -29,6 +29,7 @@ var players = [];
 var turn = 0;
 var word = '';
 var scores = {};
+var names = {};
 
 //if everyone guesses it, end the turn early
 var finished = 0;
@@ -78,16 +79,27 @@ io.on('connection', (socket) => {
   socket.on('player', (nickname) => {
     socket.broadcast.emit('player', nickname);
     scores[nickname] = 0;
+    names[socket.id] = nickname;
   });
 
   socket.on('disconnect', () => {
     console.log('a user has disconnected');
     players.splice(players.indexOf(socket),1);
     
+    var nickname = names[socket.id];
+    delete scores[nickname];
+    delete names[socket.id];
+
     turn--;
     turn = nextTurn(turn, players);
+    io.emit('left', nickname);
     if (players.length != 0)
         io.to(players[turn].id).emit('turn');
+  });
+
+  socket.on('nickname', (nickname) => {
+    console.log(nickname);
+    delete scores[nickname];
   });
 
   socket.on('word', (word) => {

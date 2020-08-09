@@ -222,6 +222,12 @@ $(document).ready(function() {
        ctx.stroke();
    });
 
+   socket.on('left', function(name) {
+      $('#'+name).remove();
+      $('#log').append($('<p>')
+          .text(name.toUpperCase() + ' LEFT.'));
+   });
+
    var hasStarted = false;
    var isDrawing = false;
 
