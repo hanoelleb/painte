@@ -28,6 +28,7 @@ app.use(function(req, res, next) {
 var players = [];
 var turn = 0;
 var word = '';
+var scores = {};
 
 function nextTurn(turn, players) {
     return (turn+1) % players.length;
@@ -45,11 +46,8 @@ function processGuess(word, guess) {
 }
 
 io.on('connection', (socket) => {
-  console.log('a user is connected');
   players.push(socket);
-
-  for (var i = 0; i < players.length; i++)
-     console.log(players[i].id);
+  io.to(socket.id).emit('roster', scores);
 
   if (players[turn] === socket) {
     io.emit('turn');
@@ -72,7 +70,8 @@ io.on('connection', (socket) => {
   });
 
   socket.on('player', (nickname) => {
-    io.emit('player', nickname);
+    socket.broadcast.emit('player', nickname);
+    scores[nickname] = 0;
   });
 
   socket.on('disconnect', () => {
@@ -92,6 +91,11 @@ io.on('connection', (socket) => {
     else 
 	word = processGuess(word, data[0]);
     io.emit('update', [word, data[1], data[2]]);
+  });
+
+  socket.on('correct', (data) => {
+      scores[data.nickname] = data.score;
+      io.emit('correct', data);
   });
 
 });

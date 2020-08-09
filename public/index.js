@@ -147,6 +147,15 @@ $(document).ready(function() {
        });
    });
 
+   socket.on('roster', function(roster) {
+       for (const [key, value] of Object.entries(roster)) {
+           var newPlayer = $('<p>')
+               .text(key + `: ${value}`)
+               .attr('id', key);
+           $('#players').append(newPlayer);
+       }
+   });
+
    socket.on('word', function(word) {
        running = true;
        answer = word;
@@ -171,8 +180,16 @@ $(document).ready(function() {
           $('#log').append($('<p>').text(msg));
     });
 
+
    socket.on('player', function(nickname){
-      $('#players').append($('<label>').text(nickname));
+      var newPlayer = $('<p>').text(nickname + ': 0').attr('id', nickname);
+      console.log('here');
+      $('#players').append(newPlayer);
+   });
+
+   socket.on('correct', function(data){
+      console.log(data);
+      $('#'+data.nickname).text(data.nickname + `: ${data.score}`);
    });
 
    socket.on('draw', function(data) {
@@ -206,6 +223,10 @@ $(document).ready(function() {
        event.preventDefault();
        hasStarted = true;
        nickname = $('#nickname').val();
+
+       var newPlayer = $('<p>').text(nickname + ': 0').attr('id', nickname);
+       $('#players').append(newPlayer);
+
        socket.emit('player', nickname);
        $('#send').children().removeAttr('disabled');
        $(this).hide();
@@ -261,9 +282,11 @@ $(document).ready(function() {
 
 	   var check = guess.replaceAll(' ','');
 	   if (check === answer) {
+               console.log('correct');
 	       score += current_time;
                $('#score').text('SCORE: ' + score);
-               socket.emit('correct');
+               $('#'+nickname).text(nickname + `: ${score}`);
+               socket.emit('correct', {score: score, nickname: nickname});
 	   }
 	   else
 	       socket.emit('guess', [guess, $('#message').val(), nickname]);
