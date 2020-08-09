@@ -43,7 +43,10 @@ var handler = function() {
       if (current_time === 0) {
          //show the word
          //emit end of turn
-	 socket.emit('finish');
+	 if (isTurn) {
+             isTurn = false;
+	     socket.emit('finish');
+	 }
          clearCanvas();
 	 running = false;
 	 current_time = START_TIME;
@@ -120,8 +123,12 @@ $(document).ready(function() {
    var answer = '';
 
    socket.on('turn', function() {
-       console.log('your turn');
+       running = false;
        isTurn = true;
+       
+       current_time = START_TIME;
+       clearInterval(timer);
+
        wordChoices = [];
        for (var i = 0; i < 3; i++) {
            var randIndex = Math.floor(Math.random() * words.length);
@@ -151,14 +158,22 @@ $(document).ready(function() {
        for (const [key, value] of Object.entries(roster)) {
            var newPlayer = $('<p>')
                .text(key + `: ${value}`)
-               .attr('id', key);
+               .attr('id', key)
+	       .addClass('player');
            $('#players').append(newPlayer);
        }
    });
 
    socket.on('word', function(word) {
+       isTurn = false;
        running = true;
+
+       clearInterval(timer);
+       current_time = START_TIME;
+       timer = setInterval(handler, 1000);
+
        answer = word;
+
        var hidden = '';
        for (var i = 0; i < word.length; i++){
            hidden += '_ '
@@ -182,14 +197,16 @@ $(document).ready(function() {
 
 
    socket.on('player', function(nickname){
-      var newPlayer = $('<p>').text(nickname + ': 0').attr('id', nickname);
-      console.log('here');
+      var newPlayer = $('<p>').text(nickname + ': 0')
+	.attr('id', nickname)
+	.addClass('player');
       $('#players').append(newPlayer);
    });
 
    socket.on('correct', function(data){
-      console.log(data);
       $('#'+data.nickname).text(data.nickname + `: ${data.score}`);
+      $('#log').append($('<p>')
+          .text(data.nickname.toUpperCase() + ' GUESSED IT!'));
    });
 
    socket.on('draw', function(data) {
@@ -224,7 +241,9 @@ $(document).ready(function() {
        hasStarted = true;
        nickname = $('#nickname').val();
 
-       var newPlayer = $('<p>').text(nickname + ': 0').attr('id', nickname);
+       var newPlayer = $('<p>').text(nickname + ': 0')
+           .attr('id', nickname)
+	   .addClass('player');
        $('#players').append(newPlayer);
 
        socket.emit('player', nickname);

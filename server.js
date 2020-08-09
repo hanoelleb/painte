@@ -30,6 +30,9 @@ var turn = 0;
 var word = '';
 var scores = {};
 
+//if everyone guesses it, end the turn early
+var finished = 0;
+
 function nextTurn(turn, players) {
     return (turn+1) % players.length;
 }
@@ -55,7 +58,6 @@ io.on('connection', (socket) => {
 
   socket.on('finish', () => {
         word = '';
-        console.log('finished');
         turn = nextTurn(turn, players);
 	console.log(players[turn].id);
 	io.to(players[turn].id).emit('turn');
@@ -94,7 +96,17 @@ io.on('connection', (socket) => {
   });
 
   socket.on('correct', (data) => {
+      finished++;
       scores[data.nickname] = data.score;
+
+      if (finished === players.length - 1 && players.length != 1) { 
+          finished = 0;
+          word = '';
+          console.log('all finished');
+          turn = nextTurn(turn, players);
+          console.log(players[turn].id);
+          io.to(players[turn].id).emit('turn');
+      } 
       io.emit('correct', data);
   });
 

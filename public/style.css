@@ -31,7 +31,9 @@ body {
   margin-top: 110px; }
 
 #brushes {
-  margin-top: 1vw; }
+  margin-top: 1vw;
+  display: flex;
+  flex-direction: column; }
 
 #pallete {
   display: grid;
@@ -107,5 +109,12 @@ body {
     margin-left: auto;
     margin-right: auto;
     display: block; }
+
+.player {
+  color: black;
+  background-color: white;
+  border-radius: 25px;
+  padding: 5px;
+  text-align: center; }
 
 /*# sourceMappingURL=style.css.map */
