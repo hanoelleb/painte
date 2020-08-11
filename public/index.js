@@ -144,6 +144,9 @@ $(document).ready(function() {
             '</button></li>'
        );
 
+       if (nickname === '')
+	   $('.choice').attr('disabled', 'true');
+
        $('.choice').click( function() {
            //emit word to others (must be hidden)
            var word = $(this).text();
@@ -250,6 +253,8 @@ $(document).ready(function() {
    });
 
    $('#player-form').on('submit', function(event) {
+       $('.choice').removeAttr('disabled');
+
        event.preventDefault();
        hasStarted = true;
        nickname = $('#nickname').val();

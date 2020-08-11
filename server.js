@@ -87,7 +87,6 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    console.log('a user has disconnected');
     players.splice(players.indexOf(socket),1);
     
     var nickname = names[socket.id];
